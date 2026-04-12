@@ -28,10 +28,9 @@ app.add_middleware(
 wv: WordVectors = None
 current_date: date = None
 target_word: str = None
-target_vec: np.ndarray = None
-word_ranks: dict[str, int] = {}
-sorted_sims: np.ndarray = None
-sorted_order: np.ndarray = None
+word_ranks: dict[str, int] = {}          # word → rank (1-based)
+word_sims: dict[str, float] = {}         # word → similarity (0~100)
+sorted_words: list[dict] = []            # top-100 pre-built list
 
 # ── 멀티플레이어 방 관리 ────────────────────────────────────────
 rooms: dict[str, dict] = {}
@@ -64,7 +63,7 @@ def _cleanup_rooms():
 # ── 데일리 퍼즐 ─────────────────────────────────────────────────
 
 def refresh_daily_game():
-    global current_date, target_word, target_vec, word_ranks, sorted_sims, sorted_order
+    global current_date, target_word, word_ranks, word_sims, sorted_words
 
     today = date.today()
     if current_date == today:
@@ -80,12 +79,24 @@ def refresh_daily_game():
                 target_word = w
                 break
 
+    # 하루 한 번 전체 유사도/순위를 미리 계산 (dict lookup으로 O(1) 응답)
     target_vec = wv.get_vector(target_word)
+    sims = wv.all_similarities(target_vec)          # numpy matmul, 1회
+    order = np.argsort(-sims)
 
-    sims = wv.all_similarities(target_vec)
-    sorted_order = np.argsort(-sims)
-    sorted_sims = sims[sorted_order]
-    word_ranks = {wv.words[int(idx)]: rank + 1 for rank, idx in enumerate(sorted_order)}
+    word_ranks = {}
+    word_sims = {}
+    top100 = []
+    for rank_0, idx in enumerate(order):
+        idx = int(idx)
+        w = wv.words[idx]
+        r = rank_0 + 1
+        s = round(float(sims[idx]) * 100, 2)
+        word_ranks[w] = r
+        word_sims[w] = s
+        if r <= 100:
+            top100.append({"rank": r, "word": w, "similarity": s})
+    sorted_words = top100
 
     # 날짜 바뀌면 방도 초기화
     with _rooms_lock:
@@ -103,16 +114,13 @@ async def startup():
 # ── 유틸 ────────────────────────────────────────────────────────
 
 def _compute_guess(word: str) -> dict | None:
-    """단어의 유사도/순위 계산. 없는 단어면 None."""
-    if not wv.has_word(word):
+    """단어의 유사도/순위 계산. 모두 dict lookup — O(1)."""
+    if word not in word_sims:
         return None
-    vec = wv.get_vector(word)
-    sim = wv.similarity(target_vec, vec)
-    rank = word_ranks.get(word, len(wv.words))
     return {
         "word": word,
-        "similarity": round(sim * 100, 2),
-        "rank": rank,
+        "similarity": word_sims[word],
+        "rank": word_ranks[word],
         "totalWords": len(wv.words),
         "isCorrect": word == target_word,
     }
@@ -169,17 +177,9 @@ async def give_up():
 
 @app.get("/api/top100")
 async def top100():
-    """유사도 상위 100개 단어 반환"""
+    """유사도 상위 100개 단어 반환 (미리 계산된 리스트)"""
     refresh_daily_game()
-    results = []
-    for rank in range(1, 101):
-        idx = int(sorted_order[rank - 1])
-        results.append({
-            "rank": rank,
-            "word": wv.words[idx],
-            "similarity": round(float(sorted_sims[rank - 1]) * 100, 2),
-        })
-    return results
+    return sorted_words
 
 
 # ── 멀티플레이어 API ────────────────────────────────────────────

@@ -120,7 +120,7 @@ async function handleSubmit(e) {
         });
         const data = await res.json();
 
-        if (data.error) { showError(data.error); return; }
+        if (data.error) { showError(data.error); input.value = ""; return; }
 
         gameState.guesses.push({
             word: data.word,
