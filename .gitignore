@@ -1,0 +1,10 @@
+data/cc.ko.300.vec.gz
+__pycache__/
+*.pyc
+.env
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+.DS_Store
