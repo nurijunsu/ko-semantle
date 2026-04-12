@@ -154,9 +154,11 @@ async function handleSubmit(e) {
    ══════════════════════════════════════════════════════════ */
 function renderGuesses() {
     const list   = document.getElementById("guesses-list");
-    const sorted = [...gameState.guesses].sort((a, b) => b.similarity - a.similarity);
+    const latest = gameState.guesses.length ? [gameState.guesses[gameState.guesses.length - 1]] : [];
+    const rest   = gameState.guesses.slice(0, -1).sort((a, b) => b.similarity - a.similarity);
+    const sorted = [...latest, ...rest];
 
-    list.innerHTML = sorted.map(g => {
+    list.innerHTML = sorted.map((g, i) => {
         const cls      = rankClass(g.rank);
         const barW     = Math.max(1, Math.min(100, g.similarity));
         const rankText = g.rank <= 1000 ? `${g.rank}위` : `${Math.ceil(g.rank/1000)}k+`;
