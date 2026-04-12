@@ -14,6 +14,6 @@ def get_puzzle_number(d: date = None) -> int:
 def get_daily_word(target_words: list[str], d: date = None) -> str:
     """날짜 기반으로 오늘의 정답 단어를 결정적으로 선택"""
     puzzle_num = get_puzzle_number(d)
-    h = hashlib.sha256(f"ko-semantle-daily-{puzzle_num}".encode()).hexdigest()
+    h = hashlib.sha256(f"ko-semantle-v2-{puzzle_num}".encode()).hexdigest()
     index = int(h, 16) % len(target_words)
     return target_words[index]

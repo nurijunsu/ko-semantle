@@ -41,7 +41,7 @@ async function init() {
         totalWords   = data.totalWords;
         document.getElementById("puzzle-number").textContent = `#${puzzleNumber}`;
 
-        loadState();
+        // 새로고침하면 항상 처음부터 시작
         loadRoomState();
         renderGuesses();
         updateStats();
