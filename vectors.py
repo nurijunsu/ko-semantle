@@ -19,7 +19,7 @@ class WordVectors:
         with open(words_path, "r", encoding="utf-8") as f:
             self.words = json.load(f)
 
-        self.vectors = np.load(vectors_path).astype(np.float32)
+        self.vectors = np.load(vectors_path).astype(np.float32)  # float16 on disk → float32 in memory
 
         # 코사인 유사도를 위해 벡터 정규화
         norms = np.linalg.norm(self.vectors, axis=1, keepdims=True)

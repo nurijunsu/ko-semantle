@@ -140,7 +140,7 @@ def _process_gz_file(gz_path, max_words, vectors_path, words_path):
 
 
 def _save(words, vectors, dim, vectors_path, words_path):
-    vectors_np = np.array(vectors, dtype=np.float32)
+    vectors_np = np.array(vectors, dtype=np.float16)
     np.save(vectors_path, vectors_np)
     with open(words_path, "w", encoding="utf-8") as f:
         json.dump(words, f, ensure_ascii=False)
