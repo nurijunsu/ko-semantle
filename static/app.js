@@ -162,6 +162,7 @@ function renderGuesses() {
         const cls      = rankClass(g.rank);
         const barW     = Math.max(1, Math.min(100, g.similarity));
         const rankText = g.rank <= 1000 ? `${g.rank}위` : `${Math.ceil(g.rank/1000)}k+`;
+        const sep = (i === 0 && rest.length) ? '<div class="guess-divider"></div>' : '';
         return `
         <div class="guess-row ${cls}" data-word="${g.word}">
             <span class="guess-num">${g.guessNum}</span>
@@ -169,7 +170,7 @@ function renderGuesses() {
             <span class="guess-sim">${g.similarity.toFixed(2)}</span>
             <span class="guess-rank">${rankText}</span>
             <div class="guess-bar-wrap"><div class="guess-bar-fill" style="width:${barW}%"></div></div>
-        </div>`;
+        </div>${sep}`;
     }).join("");
 }
 

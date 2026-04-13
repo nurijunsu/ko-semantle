@@ -470,6 +470,12 @@ body::after {
     gap: 8px;
 }
 
+.guess-divider {
+    height: 1px;
+    background: var(--line-soft);
+    margin: 2px 8px;
+}
+
 .guess-row {
     display: grid;
     grid-template-columns: 42px 1fr 78px 74px 96px;
