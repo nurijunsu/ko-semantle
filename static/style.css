@@ -110,67 +110,60 @@ body::after {
 
 .header {
     text-align: center;
-    padding: 12px 14px 8px;
+    padding: 20px 14px 10px;
     background: linear-gradient(180deg, rgba(255, 248, 240, 0.72), rgba(255, 248, 240, 0.34));
     border: 1px solid rgba(255, 255, 255, 0.55);
     border-radius: 24px;
+    position: relative;
 }
 
-.header-top {
+.help-btn {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: 1px solid var(--line-soft);
+    background: rgba(255, 255, 255, 0.6);
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    font-family: var(--font);
+}
+
+.help-btn:hover {
+    background: #fff;
+    color: var(--accent);
+    border-color: var(--accent-light);
 }
 
 .title {
     font-family: var(--font-display);
-    font-size: 2.5rem;
-    letter-spacing: 0.01em;
+    font-size: 2.6rem;
+    letter-spacing: 0.04em;
     color: var(--accent-deep);
-    text-shadow: 0 8px 24px rgba(213, 106, 58, 0.16);
 }
 
 .puzzle-num {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 62px;
-    padding: 6px 10px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(213, 106, 58, 0.14);
-    font-size: 0.83rem;
-    color: var(--text-secondary);
-    font-weight: 700;
+    display: block;
+    margin-top: 2px;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-weight: 600;
+    letter-spacing: 0.05em;
 }
 
 .subtitle {
-    margin-top: 8px;
-    font-size: 0.95rem;
+    margin-top: 6px;
+    font-size: 0.92rem;
     color: var(--text-secondary);
 }
-
-.icon-btn {
-    background: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(213, 106, 58, 0.12);
-    color: var(--accent-deep);
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 999px;
-    transition: transform .2s, background .2s, box-shadow .2s;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 8px 20px rgba(102, 66, 27, 0.08);
-}
-
-.icon-btn:hover {
-    transform: translateY(-1px);
-    background: #fff8ef;
-    box-shadow: 0 10px 24px rgba(102, 66, 27, 0.12);
-}
-
-.header-info { display: flex; align-items: center; }
 
 .mode-bar {
     display: inline-flex;
